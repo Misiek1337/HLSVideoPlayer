@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title> HLS Video player by Micha³ Wiœniowski</title>
+  </head>
+
+  <body>
+
+    <center>
+      <h1>Example video player.</h1>
+
+      <p>Made by Micha³ Wiœniowski using <a href="https://github.com/video-dev/hls.js/blob/master/docs/API.md">hls.js</a>
+      </p>
+      <p>
+        <label for="selectvideo">Choose a video:</label>
+
+        <select id="videoselection" onchange="myFunction()">
+          <option value="">Dropdown to select.</option>
+          <option value="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">Big Buck Bunny</option>
+          <option value="https://test-streams.mux.dev/dai-discontinuity-deltatre/manifest.m3u8">Advertisement video</option>
+          <option value="https://playertest.longtailvideo.com/adaptive/captions/playlist.m3u8">Captions video</option>
+        </select>
+
+      </p>
+      OR
+      <p>
+        Enter a video link:
+        <input name="textbox" id="textbox" type="text" />
+        <input name="buttonExecute" onclick="myFunction1()" type="button" value="Play" />
+
+      </p>
+
+
+      <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+      <video id="video" controls></video>
+      <script>
+        function myFunction() {
+          if (Hls.isSupported()) {
+            var video = document.getElementById('video');
+            var hls = new Hls();
+            var url = document.getElementById("videoselection").value;
+
+            // bind them together
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MEDIA_ATTACHED, function() {
+              console.log("video and hls.js are now bound together !");
+              hls.loadSource(url);
+              hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
+                video.play();
+                console.log("manifest loaded, found " + data.levels.length + " quality level");
+
+              });
+            });
+          }
+        }
+
+        function myFunction1() {
+          if (Hls.isSupported()) {
+            var video = document.getElementById('video');
+            var hls = new Hls();
+            var url = document.getElementById("textbox").value;
+
+            // bind them together
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MEDIA_ATTACHED, function() {
+              console.log("video and hls.js are now bound together !");
+              hls.loadSource(url);
+              hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
+                video.play();
+                console.log("manifest loaded, found " + data.levels.length + " quality level");
+
+              });
+            });
+          }
+        }
+
+      </script>
+    </center>
+  </body>
+
+</html>
